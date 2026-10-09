@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== DYNAMIC TITLE (JS update karega) ===== -->
+  <title>Live Stream — NFLBite</title>
+  <meta name="description" content="Watch live sports streams in HD on NFLBite — NFL, NBA, MLB, NHL, UFC, Boxing, Soccer and more.">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="icon" type="image/x-icon" href="https://nflbite.is/nflbite.png">
+  <link rel="apple-touch-icon" href="https://nflbite.is/nflbite.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://ovogoal.cyou">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    :root {
+      --mainColor: #EC4750;
+      --darkBg: #1a1a24;
+      --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      padding-bottom: 110px;
+    }
+    a, a:hover, a:focus { text-decoration: none; color: inherit; }
+
+    /* ===== NAVBAR ===== */
+    .header-nav {
+      background: var(--darkBg);
+      padding: 14px 20px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .header-nav .inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .header-nav .logo i {
+      color: var(--mainColor);
+      font-size: 1.4rem;
+    }
+    .header-nav nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .header-nav nav ul li a {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 6px 14px;
+      display: block;
+      transition: 0.2s;
+    }
+    .header-nav nav ul li a:hover { color: var(--mainColor); }
+
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #5865F2;
+      color: #fff !important;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .discord-btn:hover {
+      background: #4752c4;
+      color: #fff !important;
+      transform: translateY(-1px);
+    }
+    .discord-btn img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+    @media (max-width: 650px) {
+      .discord-btn { padding: 6px 12px; font-size: 12px; }
+      .discord-btn img { width: 16px; height: 16px; }
+    }
+
+    /* ===== LAYOUT ===== */
+    .main-container {
+      max-width: 1400px;
+      margin: 20px auto 0;
+      padding: 0 15px;
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+    }
+    .content-col {
+      flex: 1;
+      min-width: 0;
+      margin-right: 320px;
+    }
+    .sidebar-col {
+      width: 300px;
+      position: fixed;
+      top: 100px;
+      right: calc((100vw - 1400px) / 2 + 15px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 40;
+    }
+    @media (max-width: 1460px) {
+      .sidebar-col { right: 15px; }
+    }
+
+    /* ===== MATCH INFO BAR ===== */
+    .match-info {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #eef2f7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .match-info .league {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--mainColor);
+      padding: 5px 14px;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .match-info .teams {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .match-info .team {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .match-info .team img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .match-info .team .tname {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+    .match-info .vs {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #94a3b8;
+      padding: 0 4px;
+    }
+    .match-info .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 600;
+      text-align: right;
+    }
+    .match-info .meta span i {
+      color: var(--mainColor);
+      margin-right: 6px;
+      width: 14px;
+    }
+
+    /* ===== VIDEO BOX ===== */
+    .video-box {
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    .video-box iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ===== NO STREAM ===== */
+    #noStream {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 20px;
+      color: #94a3b8;
+      background: #111;
+      border-radius: 14px;
+      gap: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    #noStream i {
+      font-size: 3rem;
+      color: var(--mainColor);
+    }
+
+    /* ===== BACK BUTTON ===== */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--mainColor);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 50px;
+      margin-top: 22px;
+      transition: 0.2s;
+      box-shadow: 0 4px 14px rgba(236,71,80,0.3);
+    }
+    .back-btn:hover {
+      background: #d93b44;
+      transform: translateY(-2px);
+    }
+
+    /* ===== AD SLOTS ===== */
+    .ad-slot {
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      margin: 15px auto;
+    }
+    .ad-slot-top { max-width: 728px; height: 90px; }
+    .ad-slot-sidebar { width: 300px; height: 250px; }
+    .ad-slot-bottom { max-width: 468px; height: 60px; }
+    .ad-close-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: 0.2s;
+    }
+    .ad-close-btn:hover { background: #ef4444; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--darkBg);
+      color: #fff;
+      padding: 30px 0;
+      margin-top: 50px;
+      border-radius: 30px 30px 0 0;
+      text-align: center;
+    }
+    .footer .copyright {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .footer .copyright strong { color: var(--mainColor); }
+
+    /* ===== STICKY BOTTOM ===== */
+    .ad-slot-sticky-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      height: auto;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .ad-slot-sticky-bottom .ad-inner {
+      width: 728px;
+      max-width: 100vw;
+      height: 90px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .main-container { flex-direction: column; }
+      .content-col { margin-right: 0; width: 100%; }
+      .sidebar-col {
+        position: static;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .ad-slot-sidebar { flex: 1; min-width: 280px; max-width: 300px; }
+    }
+    @media (max-width: 700px) {
+      .match-info { padding: 18px 20px; flex-direction: column; align-items: flex-start; }
+      .match-info .meta { text-align: left; }
+      .match-info .team img { width: 42px; height: 42px; }
+      .match-info .team .tname { font-size: 1rem; }
+      .header-nav nav ul li a { padding: 6px 10px; font-size: 13px; }
+      .ad-slot-top { height: 70px; }
+      .ad-slot-sticky-bottom .ad-inner { height: 70px; width: 100vw; max-width: 100vw; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="header-nav">
+    <div class="inner">
+      <a href="index.html" class="logo" aria-label="NFLBite Home">
+        <i class="fas fa-bolt"></i> NFLBite
+      </a>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#nfl">Reddit NFL Streams</a></li>
+          <li><a href="index.html#scores">Scores</a></li>
+          <li><a href="index.html#news">NFL News</a></li>
+        </ul>
+        <a class="discord-btn" href="https://discord.gg/3K2B2QmJ2" target="_blank" rel="noopener noreferrer" aria-label="Join NFLBite Discord">
+          <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord"
+               onerror="this.style.display='none';" loading="lazy">
+          Join Discord
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTAINER ===== -->
+  <div class="main-container">
+    <div class="content-col">
+
+      <!-- ===== AD SLOT: TOP 728x90 ===== -->
+      <div class="ad-slot ad-slot-top" id="topBannerAd">
+        <button class="ad-close-btn" onclick="closeAd('topBannerAd')" title="Close ad">
+          <i class="fas fa-times"></i>
+        </button>
+        <script>
+          atOptions = {
+            'key' : '6354d77f40452c3b59afb1daa88bbb78',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        </script>
+        <script src="https://czernik.org/22/6354d77f40452c3b59afb1daa88bbb78"></script>
+      </div>
+
+      <!-- ===== MATCH INFO ===== -->
+      <div class="match-info" id="matchInfo">
+        <div>
+          <div class="league" id="infoLeague">Sports</div>
+          <div class="teams">
+            <div class="team">
+              <img id="infoTeam1Logo" src="https://a.espncdn.com/i/teamlogos/default-team-logo-500.png" alt="Team 1">
+              <span class="tname" id="infoTeam1">TBD</span>
+            </div>
+            <span class="vs">VS</span>
+            <div class="team">
+              <img id="infoTeam2Logo" src="https://a.espncdn.com/i/teamlogos/default-team-logo-500.png" alt="Team 2">
+              <span class="tname" id="infoTeam2">TBD</span>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <span><i class="fas fa-calendar-alt"></i><span id="infoDate">—</span></span>
+          <span><i class="fas fa-clock"></i><span id="infoTime">—</span></span>
+        </div>
+      </div>
+
+      <!-- ===== VIDEO ===== -->
+      <div class="video-box" id="videoContainer">
+        <div id="noStream">
+          <i class="fas fa-tv"></i>
+          <span>Loading stream...</span>
+        </div>
+      </div>
+
+      <!-- ===== AD SLOT: BOTTOM 468x60 ===== -->
+      <div class="ad-slot ad-slot-bottom" id="bottomBannerAd">
+        <button class="ad-close-btn" onclick="closeAd('bottomBannerAd')" title="Close ad">
+          <i class="fas fa-times"></i>
+        </button>
+        <script>
+          atOptions = {
+            'key' : '3bcdede1ed06d11a2c388bf24e5a43c6',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+          };
+        </script>
+        <script src="https://czernik.org/22/3bcdede1ed06d11a2c388bf24e5a43c6"></script>
+      </div>
+
+      <!-- ===== BACK BUTTON ===== -->
+      <a class="back-btn" href="index.html">
+        <i class="fas fa-arrow-left"></i> Back to All Matches
+      </a>
+
+    </div>
+
+    <!-- ===== SIDEBAR ADS ===== -->
+    <div class="sidebar-col">
+      <div class="ad-slot ad-slot-sidebar" id="sidebarAd1">
+        <button class="ad-close-btn" onclick="closeAd('sidebarAd1')" title="Close ad">
+          <i class="fas fa-times"></i>
+        </button>
+        <script>
+          atOptions = {
+            'key' : '257398e0fb221df23527dba0d06b4833',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://czernik.org/22/257398e0fb221df23527dba0d06b4833"></script>
+      </div>
+      <div class="ad-slot ad-slot-sidebar" id="sidebarAd2">
+        <button class="ad-close-btn" onclick="closeAd('sidebarAd2')" title="Close ad">
+          <i class="fas fa-times"></i>
+        </button>
+        <script>
+          atOptions = {
+            'key' : '257398e0fb221df23527dba0d06b4833',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://czernik.org/22/257398e0fb221df23527dba0d06b4833"></script>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="copyright">
+      <p>© 2026 <strong>NFLBite</strong> — Reddit NFL Streams | NFL Streams | NFL Webcast. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== STICKY BOTTOM 728x90 ===== -->
+  <div class="ad-slot-sticky-bottom" id="stickyBottomAd">
+    <div class="ad-inner">
+      <button class="ad-close-btn" onclick="closeAd('stickyBottomAd')" title="Close ad">
+        <i class="fas fa-times"></i>
+      </button>
+      <script>
+        atOptions = {
+          'key' : '6354d77f40452c3b59afb1daa88bbb78',
+          'format' : 'iframe',
+          'height' : 90,
+          'width' : 728,
+          'params' : {}
+        };
+      </script>
+      <script src="https://czernik.org/22/6354d77f40452c3b59afb1daa88bbb78"></script>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPT ===== -->
+  <script>
+    function closeAd(adId) {
+      const ad = document.getElementById(adId);
+      if (!ad) return;
+      ad.style.display = 'none';
+      setTimeout(function() { ad.style.display = ''; }, 2500);
+    }
+
+    (function() {
+      const API_URL = "https://ovogoal.cyou/api/v2/flyembed2.json";
+
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get('id');
+
+      const videoContainer = document.getElementById('videoContainer');
+      const noStream = document.getElementById('noStream');
+
+      function formatTime(timeStr) {
+        if (!timeStr) return 'TBD';
+        try {
+          const [hourStr, minute] = timeStr.split(':');
+          let hour = parseInt(hourStr, 10);
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          hour = hour % 12 || 12;
+          return `${hour}:${minute} ${ampm}`;
+        } catch (e) { return timeStr; }
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return '—';
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const monthIdx = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        return `${months[monthIdx]} ${day}, ${parts[0]}`;
+      }
+
+      function showError(msg) {
+        noStream.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>' + msg + '</span>';
+        noStream.style.display = 'flex';
+      }
+
+      if (!matchId) {
+        showError('No match ID provided.');
+        document.title = 'Stream Not Found — NFLBite';
+        return;
+      }
+
+      fetch(API_URL)
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data)) throw new Error('Invalid data format');
+
+          const match = data.find(m => String(m.MatchID) === String(matchId));
+
+          if (!match) {
+            showError('Match not found. It may have ended or been removed.');
+            document.title = 'Match Not Found — NFLBite';
+            return;
+          }
+
+          const team1 = match.Team1?.trim() || 'TBD';
+          const team2 = match.Team2?.trim() || 'TBD';
+          const league = (match.League || match.Sport || 'Sports').replace(/\r?\n/g, ' ').trim();
+          const date = match.MatchDate || '';
+          const time = match.MatchStartTime || '';
+          const embed = match.IframeURL || '';
+
+          document.getElementById('infoLeague').textContent = league;
+          document.getElementById('infoDate').textContent = formatDate(date);
+          document.getElementById('infoTime').textContent = formatTime(time);
+          document.getElementById('infoTeam1').textContent = team1;
+          document.getElementById('infoTeam2').textContent = team2;
+
+          const img1 = document.getElementById('infoTeam1Logo');
+          img1.src = match.Team1Logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png';
+          img1.onerror = function() { this.src = 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'; };
+
+          const img2 = document.getElementById('infoTeam2Logo');
+          img2.src = match.Team2Logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png';
+          img2.onerror = function() { this.src = 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'; };
+
+          // ---------- AUTO TITLE ----------
+          document.title = team1 + ' vs ' + team2 + ' | Live Stream — NFLBite';
+
+          // ---------- LOAD IFRAME ----------
+          if (embed && embed.trim() !== '') {
+            noStream.style.display = 'none';
+            const iframe = document.createElement('iframe');
+            iframe.src = embed;
+            iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('scrolling', 'no');
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
+            videoContainer.appendChild(iframe);
+          } else {
+            showError('Stream not available for this match.');
+          }
+        })
+        .catch(err => {
+          console.error('Error loading match:', err);
+          showError('Failed to load stream. Please try again later.');
+          document.title = 'Error — NFLBite';
+        });
+    })();
+  </script>
+
+  <!-- Histats -->
+  <script type="text/javascript">var _Hasync= _Hasync|| [];
+  _Hasync.push(['Histats.start', '1,5048377,4,9,110,60,00010000']);
+  _Hasync.push(['Histats.fasi', '1']);
+  _Hasync.push(['Histats.track_hits', '']);
+  (function() {
+  var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+  hs.src = ('//s10.histats.com/js15_as.js');
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+  })();</script>
+  <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5048377&101" alt="website stats" border="0"></a></noscript>
+
+  <!-- Cloudflare Insights -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"bd9bc195fa7744a993ef7517fc06e82c","r":1,"spa":2}' crossorigin="anonymous"></script>
+
+</body>
+</html>
